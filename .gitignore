@@ -3,8 +3,10 @@
 __pycache__/
 .pytest_cache/
 *.pyc
+.DS_Store
 data/*.db
 data/outbox/*.html
 web/.next/
 web/node_modules/
 web/.env.local
+web/*.tsbuildinfo
