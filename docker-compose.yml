@@ -1,0 +1,44 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  worker:
+    build: .
+    env_file:
+      - .env
+    environment:
+      - TZ=${LOCAL_TIMEZONE:-America/New_York}
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    command: python -m src.queue.workers
+    depends_on:
+      - redis
+
+  scheduler:
+    build: .
+    env_file:
+      - .env
+    environment:
+      - TZ=${LOCAL_TIMEZONE:-America/New_York}
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    command: sh -c "python -m src.queue.scheduler && rqscheduler --host redis --port 6379 --db 0"
+    depends_on:
+      - redis
+
+  runner:
+    build: .
+    env_file:
+      - .env
+    environment:
+      - TZ=${LOCAL_TIMEZONE:-America/New_York}
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    command: python -m src.main enqueue-once
+    depends_on:
+      - redis

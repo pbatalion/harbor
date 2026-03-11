@@ -1,0 +1,31 @@
+app:
+  schedule_hours_local: [7, 12, 17]
+  queue_name: assistant
+  log_level: INFO
+
+filters:
+  email_noise_senders:
+    - no-reply@
+    - notifications@
+  email_noise_subject_keywords:
+    - newsletter
+    - marketing
+    - digest
+
+redaction:
+  enabled: true
+  custom_sensitive_terms: []
+
+delivery:
+  digest_subject_prefix: "AI Ops Digest"
+  outbox_dir: data/outbox
+
+sources:
+  gmail:
+    enabled: true
+  github:
+    enabled: true
+  calendar:
+    enabled: true
+  hedy:
+    enabled: true
