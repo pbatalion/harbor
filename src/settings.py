@@ -43,6 +43,20 @@ class SourcesConfig(BaseModel):
     hedy: SourceToggleConfig = Field(default_factory=SourceToggleConfig)
 
 
+class DraftRoutingConfig(BaseModel):
+    email_patterns: list[str] = Field(default_factory=list)
+    is_default: bool = False
+
+
+class WorkspaceConfig(BaseModel):
+    slug: str = ""
+    name: str = ""
+    description: str = ""
+    sources: list[str] = Field(default_factory=list)
+    sort_order: int = 0
+    draft_routing: DraftRoutingConfig = Field(default_factory=DraftRoutingConfig)
+
+
 class Settings(BaseModel):
     app: AppConfig = Field(default_factory=AppConfig)
     filters: FiltersConfig = Field(default_factory=FiltersConfig)
@@ -98,6 +112,9 @@ class Settings(BaseModel):
     seed_mock_data_if_empty: bool = True
     encryption_key_path: str = "data/secret.key"
 
+    # Workspace configuration (loaded from config/workspaces.yaml)
+    workspaces: dict[str, WorkspaceConfig] = Field(default_factory=dict)
+
 
 def _load_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
@@ -106,22 +123,44 @@ def _load_yaml(path: Path) -> dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
-def _to_bool(value: str | None, default: bool) -> bool:
+def _env(key: str, default: str = "") -> str:
+    """Get env var, treating empty strings as the default."""
+    value = os.getenv(key)
+    return value if value else default
+
+
+def _env_int(key: str, default: int) -> int:
+    """Get env var as int."""
+    value = os.getenv(key)
+    return int(value) if value else default
+
+
+def _env_float(key: str, default: float) -> float:
+    """Get env var as float."""
+    value = os.getenv(key)
+    return float(value) if value else default
+
+
+def _env_bool(key: str, default: bool) -> bool:
+    """Get env var as bool."""
+    value = os.getenv(key)
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def _split_csv(value: str | None) -> list[str]:
+def _env_list(key: str, default: list[str] | None = None) -> list[str]:
+    """Get env var as comma-separated list."""
+    value = os.getenv(key)
     if not value:
-        return []
+        return default or []
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
-def _resolve_runtime_path(path_value: str, project_root: Path) -> str:
+def _resolve_path(path_value: str, project_root: Path) -> str:
+    """Resolve path relative to project root, handling Docker paths."""
     path = Path(path_value)
     if path.is_absolute():
-        # Support local runs even when .env uses container paths like /app/data/...
         if path_value.startswith("/app/") and not Path("/app").exists():
             return str(project_root / path_value.removeprefix("/app/"))
         return path_value
@@ -129,6 +168,7 @@ def _resolve_runtime_path(path_value: str, project_root: Path) -> str:
 
 
 def _resolve_redis_url(redis_url: str) -> str:
+    """Convert Docker redis hostname to localhost for local dev."""
     parsed = urlparse(redis_url)
     if parsed.hostname != "redis":
         return redis_url
@@ -140,89 +180,108 @@ def _resolve_redis_url(redis_url: str) -> str:
     return urlunparse((parsed.scheme, netloc, parsed.path, parsed.params, parsed.query, parsed.fragment))
 
 
+def _load_workspaces(root: Path) -> dict[str, WorkspaceConfig]:
+    """Load workspace configuration from config/workspaces.yaml."""
+    data = _load_yaml(root / "config" / "workspaces.yaml")
+    workspaces: dict[str, WorkspaceConfig] = {}
+
+    for slug, config in data.get("workspaces", {}).items():
+        draft_routing_data = config.get("draft_routing", {})
+        workspaces[slug] = WorkspaceConfig(
+            slug=slug,
+            name=config.get("name", slug),
+            description=config.get("description", ""),
+            sources=config.get("sources", []),
+            sort_order=config.get("sort_order", 0),
+            draft_routing=DraftRoutingConfig(
+                email_patterns=draft_routing_data.get("email_patterns", []),
+                is_default=draft_routing_data.get("is_default", False),
+            ),
+        )
+
+    return workspaces
+
+
 @lru_cache(maxsize=1)
 def load_settings() -> Settings:
     root = Path(__file__).resolve().parent.parent
     load_dotenv(root / ".env")
     yaml_data = _load_yaml(root / "config" / "settings.yaml")
+    workspaces = _load_workspaces(root)
 
     base = Settings(**yaml_data)
 
-    database_path = _resolve_runtime_path(
-        os.getenv("DATABASE_PATH", base.database_path),
-        root,
-    )
-    encryption_key_path = _resolve_runtime_path(
-        os.getenv("ENCRYPTION_KEY_PATH", base.encryption_key_path),
-        root,
-    )
-    outbox_dir = _resolve_runtime_path(base.delivery.outbox_dir, root)
-
-    return base.model_copy(
+    # Build settings with env var overrides
+    settings = base.model_copy(
         update={
-            "redis_url": _resolve_redis_url(os.getenv("REDIS_URL", base.redis_url)),
-            "database_path": database_path,
-            "local_timezone": os.getenv("LOCAL_TIMEZONE", base.local_timezone),
-            "checkpoint_overlap_minutes": int(
-                os.getenv("CHECKPOINT_OVERLAP_MINUTES", str(base.checkpoint_overlap_minutes))
+            "redis_url": _resolve_redis_url(_env("REDIS_URL", base.redis_url)),
+            "database_path": _resolve_path(_env("DATABASE_PATH", base.database_path), root),
+            "local_timezone": _env("LOCAL_TIMEZONE", base.local_timezone),
+            "checkpoint_overlap_minutes": _env_int("CHECKPOINT_OVERLAP_MINUTES", base.checkpoint_overlap_minutes),
+            "lookback_days": _env_int("LOOKBACK_DAYS", base.lookback_days),
+            "gmail_page_size": _env_int("GMAIL_PAGE_SIZE", base.gmail_page_size),
+            "gmail_max_pages": _env_int("GMAIL_MAX_PAGES", base.gmail_max_pages),
+            "gmail_pending_thread_limit": _env_int("GMAIL_PENDING_THREAD_LIMIT", base.gmail_pending_thread_limit),
+            "gmail_thread_context_max_messages": _env_int("GMAIL_THREAD_CONTEXT_MAX_MESSAGES", base.gmail_thread_context_max_messages),
+            "anthropic_api_key": _env("ANTHROPIC_API_KEY", base.anthropic_api_key),
+            "anthropic_model": _env("ANTHROPIC_MODEL", base.anthropic_model),
+            "llm_monthly_budget_usd": _env_float("LLM_MONTHLY_BUDGET_USD", base.llm_monthly_budget_usd),
+            "delivery_email_enabled": _env_bool("DELIVERY_EMAIL_ENABLED", base.delivery_email_enabled),
+            "delivery_sms_enabled": _env_bool("DELIVERY_SMS_ENABLED", base.delivery_sms_enabled),
+            "digest_email_to": _env("DIGEST_EMAIL_TO", base.digest_email_to),
+            "digest_email_from": _env("DIGEST_EMAIL_FROM", base.digest_email_from),
+            "smtp_host": _env("SMTP_HOST", base.smtp_host),
+            "smtp_port": _env_int("SMTP_PORT", base.smtp_port),
+            "smtp_username": _env("SMTP_USERNAME", base.smtp_username),
+            "smtp_password": _env("SMTP_PASSWORD", base.smtp_password),
+            "smtp_use_tls": _env_bool("SMTP_USE_TLS", base.smtp_use_tls),
+            "twilio_account_sid": _env("TWILIO_ACCOUNT_SID", base.twilio_account_sid),
+            "twilio_auth_token": _env("TWILIO_AUTH_TOKEN", base.twilio_auth_token),
+            "twilio_from": _env("TWILIO_FROM", base.twilio_from),
+            "twilio_to": _env("TWILIO_TO", base.twilio_to),
+            "google_client_id": _env("GOOGLE_CLIENT_ID", base.google_client_id),
+            "google_client_secret": _env("GOOGLE_CLIENT_SECRET", base.google_client_secret),
+            "google_refresh_token_work": _env("GOOGLE_REFRESH_TOKEN_WORK", base.google_refresh_token_work),
+            "google_refresh_token_personal": _env("GOOGLE_REFRESH_TOKEN_PERSONAL", base.google_refresh_token_personal),
+            "google_calendar_ids": _env_list("GOOGLE_CALENDAR_IDS", base.google_calendar_ids),
+            "github_token": _env("GITHUB_TOKEN", base.github_token),
+            "github_org": _env("GITHUB_ORG", base.github_org),
+            "hedy_api_base_url": _env("HEDY_API_BASE_URL", base.hedy_api_base_url),
+            "hedy_api_key": _env("HEDY_API_KEY", base.hedy_api_key),
+            "supabase_url": _env("SUPABASE_URL", base.supabase_url),
+            "supabase_service_role_key": _env("SUPABASE_SERVICE_ROLE_KEY", base.supabase_service_role_key),
+            "seed_mock_data_if_empty": _env_bool("SEED_MOCK_DATA_IF_EMPTY", base.seed_mock_data_if_empty),
+            "encryption_key_path": _resolve_path(_env("ENCRYPTION_KEY_PATH", base.encryption_key_path), root),
+            "delivery": base.delivery.model_copy(
+                update={"outbox_dir": _resolve_path(base.delivery.outbox_dir, root)}
             ),
-            "lookback_days": int(os.getenv("LOOKBACK_DAYS", str(base.lookback_days))),
-            "gmail_page_size": int(os.getenv("GMAIL_PAGE_SIZE", str(base.gmail_page_size))),
-            "gmail_max_pages": int(os.getenv("GMAIL_MAX_PAGES", str(base.gmail_max_pages))),
-            "gmail_pending_thread_limit": int(
-                os.getenv("GMAIL_PENDING_THREAD_LIMIT", str(base.gmail_pending_thread_limit))
-            ),
-            "gmail_thread_context_max_messages": int(
-                os.getenv(
-                    "GMAIL_THREAD_CONTEXT_MAX_MESSAGES",
-                    str(base.gmail_thread_context_max_messages),
-                )
-            ),
-            "anthropic_api_key": os.getenv("ANTHROPIC_API_KEY", base.anthropic_api_key),
-            "anthropic_model": os.getenv("ANTHROPIC_MODEL", base.anthropic_model),
-            "llm_monthly_budget_usd": float(
-                os.getenv("LLM_MONTHLY_BUDGET_USD", str(base.llm_monthly_budget_usd))
-            ),
-            "delivery_email_enabled": _to_bool(
-                os.getenv("DELIVERY_EMAIL_ENABLED"), base.delivery_email_enabled
-            ),
-            "delivery_sms_enabled": _to_bool(
-                os.getenv("DELIVERY_SMS_ENABLED"), base.delivery_sms_enabled
-            ),
-            "digest_email_to": os.getenv("DIGEST_EMAIL_TO", base.digest_email_to),
-            "digest_email_from": os.getenv("DIGEST_EMAIL_FROM", base.digest_email_from),
-            "smtp_host": os.getenv("SMTP_HOST", base.smtp_host),
-            "smtp_port": int(os.getenv("SMTP_PORT", str(base.smtp_port))),
-            "smtp_username": os.getenv("SMTP_USERNAME", base.smtp_username),
-            "smtp_password": os.getenv("SMTP_PASSWORD", base.smtp_password),
-            "smtp_use_tls": _to_bool(os.getenv("SMTP_USE_TLS"), base.smtp_use_tls),
-            "twilio_account_sid": os.getenv("TWILIO_ACCOUNT_SID", base.twilio_account_sid),
-            "twilio_auth_token": os.getenv("TWILIO_AUTH_TOKEN", base.twilio_auth_token),
-            "twilio_from": os.getenv("TWILIO_FROM", base.twilio_from),
-            "twilio_to": os.getenv("TWILIO_TO", base.twilio_to),
-            "google_client_id": os.getenv("GOOGLE_CLIENT_ID", base.google_client_id),
-            "google_client_secret": os.getenv("GOOGLE_CLIENT_SECRET", base.google_client_secret),
-            "google_refresh_token_work": os.getenv(
-                "GOOGLE_REFRESH_TOKEN_WORK", base.google_refresh_token_work
-            ),
-            "google_refresh_token_personal": os.getenv(
-                "GOOGLE_REFRESH_TOKEN_PERSONAL", base.google_refresh_token_personal
-            ),
-            "google_calendar_ids": _split_csv(
-                os.getenv("GOOGLE_CALENDAR_IDS", ",".join(base.google_calendar_ids))
-            ),
-            "github_token": os.getenv("GITHUB_TOKEN", base.github_token),
-            "github_org": os.getenv("GITHUB_ORG", base.github_org),
-            "hedy_api_base_url": os.getenv("HEDY_API_BASE_URL", base.hedy_api_base_url),
-            "hedy_api_key": os.getenv("HEDY_API_KEY", base.hedy_api_key),
-            "supabase_url": os.getenv("SUPABASE_URL", base.supabase_url),
-            "supabase_service_role_key": os.getenv(
-                "SUPABASE_SERVICE_ROLE_KEY", base.supabase_service_role_key
-            ),
-            "seed_mock_data_if_empty": _to_bool(
-                os.getenv("SEED_MOCK_DATA_IF_EMPTY"), base.seed_mock_data_if_empty
-            ),
-            "encryption_key_path": encryption_key_path,
-            "delivery": base.delivery.model_copy(update={"outbox_dir": outbox_dir}),
+            "workspaces": workspaces,
         }
     )
+
+    return settings
+
+
+def workspace_for_source(settings: Settings, source: str) -> str:
+    """Get workspace slug for a source based on configuration."""
+    for slug, workspace in settings.workspaces.items():
+        if source in workspace.sources:
+            return slug
+    return "downer"  # Default fallback
+
+
+def workspace_for_draft(settings: Settings, recipient: str) -> str:
+    """Get workspace slug for a draft based on recipient email patterns."""
+    recipient_lower = recipient.lower()
+    default_workspace = "downer"
+
+    for slug, workspace in settings.workspaces.items():
+        if workspace.draft_routing.is_default:
+            default_workspace = slug
+            continue
+
+        for pattern in workspace.draft_routing.email_patterns:
+            if pattern.lower() in recipient_lower:
+                return slug
+
+    return default_workspace

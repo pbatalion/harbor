@@ -75,7 +75,7 @@ def _fake_gmail_get(url, *args, **kwargs):
 def test_gmail_thread_latest_cc_only_is_not_actionable(monkeypatch) -> None:
     settings = _settings(thread_context_max=0)
     monkeypatch.setattr("src.sources.gmail.get_google_access_token", lambda **kwargs: "token")
-    monkeypatch.setattr("src.sources.gmail.requests.get", _fake_gmail_get)
+    monkeypatch.setattr("src.sources.gmail.get", _fake_gmail_get)
 
     events = fetch_gmail_events(settings, account="work", since=datetime.now(UTC) - timedelta(days=1))
 
@@ -95,7 +95,7 @@ def test_gmail_thread_latest_cc_only_is_not_actionable(monkeypatch) -> None:
 def test_gmail_thread_context_respects_max_messages(monkeypatch) -> None:
     settings = _settings(thread_context_max=1)
     monkeypatch.setattr("src.sources.gmail.get_google_access_token", lambda **kwargs: "token")
-    monkeypatch.setattr("src.sources.gmail.requests.get", _fake_gmail_get)
+    monkeypatch.setattr("src.sources.gmail.get", _fake_gmail_get)
 
     events = fetch_gmail_events(settings, account="work", since=datetime.now(UTC) - timedelta(days=1))
 

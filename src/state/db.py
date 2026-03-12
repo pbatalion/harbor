@@ -3,13 +3,10 @@ from __future__ import annotations
 import json
 import sqlite3
 from contextlib import contextmanager
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-
-def utcnow_iso() -> str:
-    return datetime.now(UTC).isoformat()
+from src.utils.timestamps import utcnow_iso
 
 
 @contextmanager

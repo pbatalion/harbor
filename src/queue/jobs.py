@@ -32,27 +32,21 @@ from src.state.db import (
 )
 from src.state.drafts import store_drafts
 from src.utils.filters import filter_noise_emails
+from src.utils.timestamps import parse_iso
 
 logger = logging.getLogger(__name__)
-
-
-def _parse_iso(value: str) -> datetime:
-    try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(UTC)
-    except Exception:
-        return datetime.now(UTC)
 
 
 def _high_watermark(events: list[dict[str, Any]]) -> datetime | None:
     if not events:
         return None
-    return max(_parse_iso(str(event.get("event_ts", ""))) for event in events)
+    return max(parse_iso(str(event.get("event_ts", ""))) for event in events)
 
 
 def _event_timestamp(event: dict[str, Any]) -> datetime:
     ts = str(event.get("timestamp") or event.get("event_ts") or "")
     if ts:
-        return _parse_iso(ts)
+        return parse_iso(ts)
     return datetime.now(UTC)
 
 
@@ -172,6 +166,7 @@ def _fetch_source_job(run_id: str, source: str) -> dict[str, Any]:
         settings.database_path,
         source,
         overlap_minutes=settings.checkpoint_overlap_minutes,
+        settings=settings,
     )
 
     try:
@@ -189,13 +184,13 @@ def _fetch_source_job(run_id: str, source: str) -> dict[str, Any]:
             events = []
 
         written = persist_source_events(settings.database_path, run_id, source, events)
-        advance_checkpoint(settings.database_path, source, _high_watermark(events))
+        advance_checkpoint(settings.database_path, source, _high_watermark(events), settings=settings)
         logger.info("Fetched source=%s run_id=%s events=%s written=%s", source, run_id, len(events), written)
         return {"source": source, "events": len(events), "written": written, "error": ""}
     except Exception as exc:
         logger.exception("Source fetch failed source=%s run_id=%s", source, run_id)
         # Keep run moving for partial-success delivery.
-        advance_checkpoint(settings.database_path, source, None)
+        advance_checkpoint(settings.database_path, source, None, settings=settings)
         return {"source": source, "events": 0, "written": 0, "error": str(exc)}
 
 

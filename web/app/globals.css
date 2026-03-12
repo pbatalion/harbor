@@ -387,3 +387,62 @@ a {
     padding-right: 18px;
   }
 }
+
+/* Action buttons */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: rgba(24, 33, 40, 0.9);
+  color: white;
+  border-color: rgba(24, 33, 40, 0.9);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn-group {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.action-btn-approve {
+  background: rgba(34, 139, 34, 0.1);
+  border-color: rgba(34, 139, 34, 0.3);
+  color: #228b22;
+}
+
+.action-btn-approve:hover:not(:disabled) {
+  background: #228b22;
+  color: white;
+  border-color: #228b22;
+}
+
+.action-btn-reject {
+  background: rgba(178, 34, 34, 0.1);
+  border-color: rgba(178, 34, 34, 0.3);
+  color: #b22222;
+}
+
+.action-btn-reject:hover:not(:disabled) {
+  background: #b22222;
+  color: white;
+  border-color: #b22222;
+}

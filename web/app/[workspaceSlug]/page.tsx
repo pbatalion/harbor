@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { loadWorkspaceSnapshot } from "@/lib/dashboard";
 import { isWorkspaceSlug, WORKSPACES } from "@/lib/workspaces";
 import { AssistantItem } from "@/lib/contracts";
+import { MarkDoneButton, DraftActionButtons } from "./ActionButtons";
 
 type PageProps = {
   params: {
@@ -165,7 +166,12 @@ export default async function WorkspacePage({ params }: PageProps) {
                         <h3>{item.title}</h3>
                         <p className="meta">{item.actor || item.source}</p>
                       </div>
-                      <span className="tag">{formatDate(item.occurredAt)}</span>
+                      <div className="item-actions">
+                        <span className="tag">{formatDate(item.occurredAt)}</span>
+                        {item.isActionable ? (
+                          <MarkDoneButton itemId={item.id} workspaceSlug={snapshot.workspace.slug} />
+                        ) : null}
+                      </div>
                     </div>
                     <p className="summary-copy">{getItemSummary(item)}</p>
                     <div className="tag-row">
@@ -226,6 +232,11 @@ export default async function WorkspacePage({ params }: PageProps) {
                     </div>
                     <p className="meta">{draft.recipient || "No explicit recipient"}</p>
                     <p className="draft-copy mono">{draft.draft}</p>
+                    {draft.status === "pending_review" ? (
+                      <DraftActionButtons draftId={draft.id} workspaceSlug={snapshot.workspace.slug} />
+                    ) : (
+                      <span className="tag">{draft.status}</span>
+                    )}
                   </article>
                 ))}
               </div>

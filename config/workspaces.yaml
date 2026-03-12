@@ -1,0 +1,25 @@
+workspaces:
+  work:
+    name: "Work"
+    description: "Network Craze email, GitHub, and operations queue."
+    sources:
+      - gmail_work
+      - github
+    sort_order: 1
+    draft_routing:
+      email_patterns:
+        - "@networkcraze.com"
+        - "apollo"
+        - "supabase"
+
+  downer:
+    name: "Downer"
+    description: "Camp Downer email, calendar, and meeting follow-through."
+    sources:
+      - gmail_personal
+      - calendar
+      - hedy
+    sort_order: 2
+    draft_routing:
+      # Default workspace for drafts not matching other patterns
+      is_default: true

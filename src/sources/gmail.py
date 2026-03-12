@@ -5,10 +5,10 @@ from datetime import UTC, datetime, timedelta
 from email.utils import getaddresses, parsedate_to_datetime
 from typing import Any
 
-import requests
-
 from src.settings import Settings
 from src.utils.auth import AuthError, get_google_access_token
+from src.utils.http import get
+from src.utils.timestamps import parse_iso, utcnow_iso
 
 logger = logging.getLogger(__name__)
 _GMAIL_METADATA_HEADERS = ["From", "Subject", "Date", "To", "Cc", "Reply-To"]
@@ -43,13 +43,6 @@ def _extract_email_addresses(value: str) -> list[str]:
         if addr:
             emails.append(addr)
     return emails
-
-
-def _parse_iso(value: str) -> datetime:
-    try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(UTC)
-    except Exception:
-        return datetime.now(UTC)
 
 
 def _parse_message_timestamp(data: dict[str, Any], headers: list[dict[str, str]]) -> datetime:
@@ -154,7 +147,7 @@ def fetch_gmail_events(settings: Settings, account: str, since: datetime) -> lis
 
     headers = {"Authorization": f"Bearer {access_token}"}
     account_email = ""
-    profile_resp = requests.get(
+    profile_resp = get(
         "https://gmail.googleapis.com/gmail/v1/users/me/profile",
         headers=headers,
         timeout=20,
@@ -173,7 +166,7 @@ def fetch_gmail_events(settings: Settings, account: str, since: datetime) -> lis
         params: dict[str, Any] = {"q": query, "maxResults": settings.gmail_page_size}
         if page_token:
             params["pageToken"] = page_token
-        list_resp = requests.get(
+        list_resp = get(
             "https://gmail.googleapis.com/gmail/v1/users/me/threads",
             headers=headers,
             params=params,
@@ -202,7 +195,7 @@ def fetch_gmail_events(settings: Settings, account: str, since: datetime) -> lis
     events: list[dict[str, Any]] = []
 
     for thread_id in thread_ids:
-        detail_resp = requests.get(
+        detail_resp = get(
             f"https://gmail.googleapis.com/gmail/v1/users/me/threads/{thread_id}",
             headers=headers,
             params={
@@ -219,7 +212,7 @@ def fetch_gmail_events(settings: Settings, account: str, since: datetime) -> lis
             continue
 
         thread_messages = [_thread_message_summary(msg, account_email) for msg in raw_messages]
-        thread_messages.sort(key=lambda message: _parse_iso(str(message.get("timestamp", ""))))
+        thread_messages.sort(key=lambda message: parse_iso(str(message.get("timestamp", ""))))
 
         context_max = settings.gmail_thread_context_max_messages
         if context_max > 0:
