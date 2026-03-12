@@ -5,7 +5,7 @@ requests==2.32.3
 pydantic==2.10.6
 PyYAML==6.0.2
 python-dotenv==1.0.1
-Jinja2==3.1.5
+Jinja2==3.1.6
 tenacity==9.0.0
 pytest==8.3.4
 cryptography==44.0.0
