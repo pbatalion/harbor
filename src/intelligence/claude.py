@@ -6,7 +6,7 @@ from typing import Any
 import requests
 
 from src.settings import Settings
-from src.utils.http import post, TransientHTTPError
+from src.utils.http import TransientHTTPError, post
 
 
 class ClaudeError(RuntimeError):

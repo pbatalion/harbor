@@ -8,7 +8,7 @@ from typing import Any
 from src.settings import Settings
 from src.utils.auth import AuthError, get_google_access_token
 from src.utils.http import get
-from src.utils.timestamps import parse_iso, utcnow_iso
+from src.utils.timestamps import parse_iso
 
 logger = logging.getLogger(__name__)
 _GMAIL_METADATA_HEADERS = ["From", "Subject", "Date", "To", "Cc", "Reply-To"]

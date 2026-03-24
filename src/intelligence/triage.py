@@ -4,7 +4,7 @@ import logging
 from datetime import UTC, datetime
 from typing import Any
 
-from src.intelligence.claude import ClaudeError, call_claude
+from src.intelligence.claude import call_claude
 from src.intelligence.prompts import SOURCE_SUMMARY_PROMPT, TRIAGE_PROMPT
 from src.settings import Settings
 
@@ -51,8 +51,8 @@ def _coerce_source_summary(source: str, payload: dict[str, Any]) -> dict[str, An
     return {
         "source": str(payload.get("source", source)),
         "summary": str(payload.get("summary", "")),
-        "urgent_items": [str(x) for x in payload.get("urgent_items", []) if isinstance(x, (str, int, float))],
-        "important_items": [str(x) for x in payload.get("important_items", []) if isinstance(x, (str, int, float))],
+        "urgent_items": [str(x) for x in payload.get("urgent_items", []) if isinstance(x, str | int | float)],
+        "important_items": [str(x) for x in payload.get("important_items", []) if isinstance(x, str | int | float)],
         "draft_candidates": [
             {
                 "type": str(item.get("type", "follow_up")),

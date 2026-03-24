@@ -1,10 +1,11 @@
 type LoginPageProps = {
-  searchParams?: {
+  searchParams: Promise<{
     next?: string;
-  };
+  }>;
 };
 
-export default function LoginPage({ searchParams }: LoginPageProps) {
+export default async function LoginPage(props: LoginPageProps) {
+  const searchParams = await props.searchParams;
   const next = searchParams?.next || "/work";
 
   return (

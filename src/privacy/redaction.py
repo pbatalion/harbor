@@ -4,7 +4,6 @@ import copy
 import re
 from typing import Any
 
-
 SECRET_PATTERNS = [
     (re.compile(r"\b(?:sk|rk|ghp|xoxb|xoxp)-[A-Za-z0-9_-]{10,}\b"), "[REDACTED_SECRET]"),
     (re.compile(r"\b\d{12,19}\b"), "[REDACTED_ACCOUNT_NUMBER]"),

@@ -9,9 +9,12 @@ from typing import Any
 from rq import Retry
 
 from src.delivery.email_digest import send_email_digest
-from src.integrations.supabase import sync_run_snapshot
 from src.delivery.sms import send_sms_alert
+from src.integrations.supabase import sync_run_snapshot
+from src.intelligence.enhanced_triage import generate_drafts, run_enhanced_triage
+from src.intelligence.normalizer import normalize_events
 from src.intelligence.schema import deterministic_fallback_digest, validate_json_schema
+from src.intelligence.storage import store_source_events
 from src.intelligence.triage import aggregate_triage, summarize_each_source
 from src.privacy.redaction import redact_sensitive_payload
 from src.queue.connection import get_queue
@@ -183,10 +186,19 @@ def _fetch_source_job(run_id: str, source: str) -> dict[str, Any]:
         else:
             events = []
 
+        # Persist to local SQLite
         written = persist_source_events(settings.database_path, run_id, source, events)
         advance_checkpoint(settings.database_path, source, _high_watermark(events), settings=settings)
-        logger.info("Fetched source=%s run_id=%s events=%s written=%s", source, run_id, len(events), written)
-        return {"source": source, "events": len(events), "written": written, "error": ""}
+
+        # Normalize and store in Supabase for enhanced triage
+        normalized = normalize_events(source, events, settings)
+        stored = store_source_events(settings, run_id, normalized)
+
+        logger.info(
+            "Fetched source=%s run_id=%s events=%s written=%s stored=%s",
+            source, run_id, len(events), written, stored
+        )
+        return {"source": source, "events": len(events), "written": written, "stored": stored, "error": ""}
     except Exception as exc:
         logger.exception("Source fetch failed source=%s run_id=%s", source, run_id)
         # Keep run moving for partial-success delivery.
@@ -235,12 +247,34 @@ def aggregate_and_deliver_job(run_id: str) -> dict[str, Any]:
         else:
             redacted = grouped
 
+        # Try enhanced triage (reads from Supabase source_events)
+        enhanced_result = None
+        try:
+            enhanced_result = run_enhanced_triage(settings, run_id)
+            logger.info("Enhanced triage completed run_id=%s", run_id)
+        except Exception:
+            logger.warning("Enhanced triage failed, falling back to legacy run_id=%s", run_id)
+
         try:
             source_summaries = summarize_each_source(settings, redacted)
             raw_analysis = aggregate_triage(settings, source_summaries, grouped)
+
+            # Merge enhanced triage insights if available
+            if enhanced_result:
+                raw_analysis["enhanced_triage"] = enhanced_result
+                # Use enhanced day plan if better
+                if enhanced_result.get("day_plan"):
+                    raw_analysis["day_plan"] = enhanced_result["day_plan"]
+                # Add cross-source insights
+                raw_analysis["cross_source_insights"] = enhanced_result.get("cross_source_insights", [])
+                # Add extracted tasks
+                raw_analysis["tasks_extracted"] = enhanced_result.get("tasks_extracted", [])
+
         except Exception:
             logger.exception("LLM pipeline failed; falling back to deterministic digest run_id=%s", run_id)
             raw_analysis = deterministic_fallback_digest(grouped)
+            if enhanced_result:
+                raw_analysis["enhanced_triage"] = enhanced_result
 
         digest = raw_analysis.get("email_digest", {})
         digest.setdefault("work_emails", grouped.get("gmail_work", [])[:25])
@@ -258,9 +292,21 @@ def aggregate_and_deliver_job(run_id: str) -> dict[str, Any]:
             draft_actions, allowed_reply_targets
         )
 
+        # Generate enhanced drafts from stored events
+        enhanced_drafts = []
+        try:
+            enhanced_drafts = generate_drafts(settings, run_id)
+            logger.info("Generated %d enhanced drafts run_id=%s", len(enhanced_drafts), run_id)
+        except Exception:
+            logger.warning("Enhanced draft generation failed run_id=%s", run_id)
+
         sms_sent = send_sms_alert(settings, analysis.get("urgent_items", []))
         digest_location = send_email_digest(settings, analysis, run_id)
-        store_drafts(settings.database_path, run_id, analysis.get("email_digest", {}).get("draft_actions", []))
+
+        # Combine legacy and enhanced drafts
+        legacy_drafts = analysis.get("email_digest", {}).get("draft_actions", [])
+        all_drafts = legacy_drafts + enhanced_drafts
+        store_drafts(settings.database_path, run_id, all_drafts)
         try:
             sync_run_snapshot(
                 settings,
