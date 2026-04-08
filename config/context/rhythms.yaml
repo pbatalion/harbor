@@ -1,0 +1,141 @@
+# Camp Downer Meeting Rhythms and Cycles
+# Generated from meeting transcripts: late 2025 - March 2026
+
+meetings:
+  - name: Semi-Weekly Sync (Director/Chair)
+    frequency: semi-weekly
+    day: varies
+    time: varies
+    attendees: [Phil, Alanna]
+    purpose: Operational coordination, staffing updates, ongoing issues
+    notes: |
+      Emma previously attended for ~1 year but no longer due to schedule.
+      Sometimes includes Amy for registration topics.
+
+  - name: Executive Committee Meeting
+    frequency: monthly
+    typical_day: First Wednesday
+    attendees: [Phil, Emma, Amanda, Brian]
+    purpose: Key decisions, budget oversight, urgent matters
+    prep_needed: Agenda items submitted in advance
+
+  - name: Board Meeting
+    frequency: 4x/year
+    typical_months: [May, July, September, November]
+    attendees: Full board
+    prep_needed: Agenda distributed 1 week prior
+    notes: |
+      November meeting is most important (elections, budget approval, annual report).
+      July meeting is in-person at camp (no WiFi).
+
+  - name: Board Development Committee
+    frequency: monthly
+    typical_day: Third Tuesday
+    time: "7:30 PM"
+    chair: James
+    attendees: [James, Phil, Emma, Kate]
+    purpose: Board recruitment, onboarding, professional development
+
+  - name: Finance Committee
+    frequency: monthly
+    typical_day: Third Tuesday
+    chair: Brian
+    attendees: [Brian, Ian]
+    purpose: Budget monitoring, scholarship fund, financial planning
+
+  - name: Buildings & Grounds Committee
+    frequency: monthly
+    typical_day: Third Tuesday
+    chair: Zack
+    attendees: [Amanda, Phil, Ryan, Zack]
+    purpose: Facilities maintenance, capital projects, bathroom renovation
+
+  - name: Operations Committee
+    frequency: monthly
+    typical_day: Third Thursday
+    chair: Emma
+    attendees: [Emma, Kelly, Kate, Alanna]
+    purpose: Policies, procedures, handbook updates, ACA compliance
+
+  - name: Bathroom Project Subcommittee
+    frequency: monthly
+    typical_day: First Wednesday
+    attendees: [Amanda, Ryan, Phil, Alanna]
+    purpose: Coordinate septic assessment and bathroom renovation
+
+  - name: ACA New England Conference
+    frequency: annual
+    timing: Late March (March 26-28)
+    location: Manchester, NH
+    attendees: Director, staff, 2-3 board members
+    purpose: Training, networking, industry best practices
+    budget: ~$500 for board member attendance
+
+cycles:
+  - name: Registration Season
+    timing: January - February
+    key_dates:
+      - CIT2 registration opens (late January)
+      - General registration opens (early February, 1 PM Saturday historically)
+    notes: |
+      Camp Brain queue system causes parent confusion.
+      Consider shifting to weekday morning opening.
+
+  - name: Hiring Season
+    timing: October - March
+    notes: |
+      Director-level hiring: October-December
+      Counselor/staff aide hiring: January-March
+      Bridge counselor positions hardest to fill
+
+  - name: Budget Season
+    timing: January - December (calendar year)
+    notes: |
+      Budget runs on calendar year
+      Annual budget approval at November board meeting
+      2026 budget: $35K deficit offset by reserves
+
+  - name: Camp Season
+    timing: Late June - August
+    notes: |
+      Limited board activity during operations
+      Board barbecue during staff orientation
+      In-person board meeting at camp in July/August
+
+  - name: Annual Meeting
+    timing: November
+    notes: |
+      Elections, budget approval, annual report, planning
+      Most important meeting of the year
+      2026 re-elections: Amanda, Kelly, Zack, Kate
+
+  - name: Water System Opening
+    timing: Late April - May
+    notes: |
+      Multi-weekend process
+      Need volunteers: Steve Ertel, Nate Ertel, Phil, Brian
+      Open in sections to detect leaks
+
+  - name: Volunteer Weekends
+    timing: Spring (before camp) and Fall (after camp)
+    notes: |
+      Planning 1-2 major volunteer weekends rather than scattered efforts
+      Separate from board-specific events
+      Julia Sinton may coordinate as Volunteer Coordinator
+
+  - name: Giving/Fundraising
+    timing: November - December
+    key_events:
+      - Giving Tuesday
+      - Winter Wishlist campaign
+    notes: |
+      Board giving rate matters for grant applications
+      Consider Spring Wishlist follow-up
+
+  - name: Board Summit
+    timing: September (planned for 2026)
+    tentative_dates: September 18-20, 2026
+    notes: |
+      Long-term visioning, team building
+      Coordinate with Tim Morton State Forester meeting
+      Camp facilities need to stay open

@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from src.intelligence.claude import call_claude
-from src.intelligence.prompts import SOURCE_SUMMARY_PROMPT, TRIAGE_PROMPT
+from src.intelligence.prompts import SOURCE_SUMMARY_PROMPT, get_triage_prompt
 from src.settings import Settings
 
 logger = logging.getLogger(__name__)
@@ -168,7 +168,7 @@ def aggregate_triage(
         try:
             model_output = call_claude(
                 settings=settings,
-                system_prompt=TRIAGE_PROMPT,
+                system_prompt=get_triage_prompt(),
                 data=payload,
                 max_tokens=2600,
             )

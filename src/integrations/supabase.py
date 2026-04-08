@@ -263,3 +263,33 @@ def sync_run_snapshot(
         _build_draft_records(settings, run_id, analysis.get("email_digest", {}).get("draft_actions", [])),
     )
     logger.info("Synced run snapshot to Supabase run_id=%s", run_id)
+
+
+def init_run_in_supabase(settings: Settings, run_id: str) -> bool:
+    """Create initial run record in Supabase before fetch jobs.
+    
+    This prevents foreign key violations when store_source_events() tries
+    to insert events with this run_id.
+    """
+    if not (settings.supabase_url and settings.supabase_service_role_key):
+        return False
+
+    try:
+        run_row = [
+            {
+                "id": run_id,
+                "status": "running",
+                "digest_location": "",
+                "day_plan": "",
+                "urgent_items": [],
+                "source_counts": {},
+                "created_at": utcnow_iso(),
+                "synced_at": utcnow_iso(),
+            }
+        ]
+        _post_rows(settings, "assistant_runs", run_row)
+        logger.info("Initialized run in Supabase run_id=%s", run_id)
+        return True
+    except Exception as exc:
+        logger.warning("Failed to init run in Supabase run_id=%s: %s", run_id, exc)
+        return False

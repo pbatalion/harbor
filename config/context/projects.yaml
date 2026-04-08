@@ -1,0 +1,163 @@
+# Camp Downer Active Projects
+# Generated from meeting transcripts: late 2025 - March 2026
+
+- name: Bathroom Building Renovation (Woodside)
+  status: active
+  owner: Amanda / Buildings & Grounds Committee
+  priority: high
+  committee: buildings_grounds
+  next_milestone: Hire licensed environmental firm for septic assessment
+  blockers:
+    - Pathways Consulting unresponsive
+    - Need septic assessment before renovation can proceed
+    - Wetland proximity may trigger Act 250 permitting
+  context: |
+    Major infrastructure project to renovate Woodside bathroom for gender inclusivity
+    and improved privacy. Septic system assessment required first due to wetland concerns.
+    Estimated surveying/engineering costs $25K-$50K. Current septic behind dining hall
+    may be in wetland buffer zone. Failing leach field is a risk.
+  last_discussed: 2026-02-11
+
+- name: Joyce Dion Memorial Scholarship
+  status: active
+  owner: Finance Committee
+  priority: medium
+  committee: finance
+  next_milestone: Clarify family's vision for award eligibility and donor involvement
+  blockers:
+    - Need to confirm family expectations for criteria and messaging
+  context: |
+    New scholarship fund in memory of longtime nature specialist and registrar.
+    Will function as separate restricted fund but awarded through existing scholarship
+    process. Recipients asked to write thank-you blurb to donor family. Concerns raised
+    about long-term governance of named need-based awards.
+  last_discussed: 2026-03-11
+
+- name: Volunteer Coordinator Position
+  status: active
+  owner: Phil / Board Development Committee
+  priority: medium
+  committee: board_development
+  next_milestone: Finalize job description and present to Board Dev Committee
+  blockers:
+    - Requires bylaws amendment for appointed non-voting board position
+    - Need full board vote to change bylaws
+  context: |
+    Julia Sinton interested in role. Position would coordinate alumni outreach,
+    volunteer weekends, and event support. Would be board-appointed (by director),
+    non-voting position. Need to avoid overburdening Julia.
+  last_discussed: 2026-03-11
+
+- name: Summer 2026 Staffing
+  status: active
+  owner: Alanna (Director)
+  priority: high
+  committee: operations
+  next_milestone: Complete final reference check for boys plus counselor
+  blockers:
+    - Bridge counselor positions harder to fill (especially boys)
+    - Some staff aides not returning for full summers
+  context: |
+    Hiring going well - 33+ staff hired by February. Director positions filled
+    (Abigail, James confirmed). Bridge counselor model still being refined.
+    Discussion about whether staff aide program needs expansion or more responsibility.
+  last_discussed: 2026-03-11
+
+- name: Water System Opening
+  status: active
+  owner: Alanna
+  priority: high
+  committee: buildings_grounds
+  next_milestone: Schedule volunteer weekends with Steve/Nate Ertel, Phil, Brian
+  blockers:
+    - Luke unavailable on weekends due to bartending
+    - Water system repairs needed (leak in main shed)
+  context: |
+    Multi-weekend process to open water system. Need coordinated volunteer effort.
+    Repairs should ideally be done while system is shut down. Ethan Phelps
+    (new board member from Killington) offered to help.
+  last_discussed: 2026-03-11
+
+- name: Board Summit/Retreat
+  status: active
+  owner: Board Development Committee
+  priority: medium
+  committee: board_development
+  next_milestone: Finalize dates (Sept 18-20, 2026) and coordinate with Tim Morton meeting
+  blockers:
+    - Need to confirm Tim Morton's space/kitchen requirements
+  context: |
+    Long-discussed board bonding and visioning event at camp. Tentatively September
+    18-20 to align with State Forester Tim Morton's meeting. Would include long-term
+    planning, team building, and possibly camp closing tasks.
+  last_discussed: 2026-02-27
+
+- name: Archery Shed
+  status: active
+  owner: Buildings & Grounds Committee
+  priority: low
+  committee: buildings_grounds
+  next_milestone: Ethan Phelps to review $6K proposal for cost realism
+  blockers:
+    - Home Depot Team Depot Grant unresponsive
+    - Quote of $6,000 seemed high for 12x7 shed
+  context: |
+    Need storage shed for archery equipment. Exploring pre-fab options from Costco
+    as alternative. Could potentially combine with maintenance storage needs.
+  last_discussed: 2026-03-11
+
+- name: Staff Housing Expansion
+  status: active
+  owner: Alanna / Buildings & Grounds
+  priority: high
+  committee: buildings_grounds
+  next_milestone: Get quote for maintenance shed conversion
+  blockers:
+    - Act 250 permit concerns if adding people
+    - Need to work within existing structures
+  context: |
+    Need additional housing for new staff positions. Options include maintenance
+    shed conversion, splitting James's room (historically two rooms), using rec hall.
+    Not increasing total occupancy, just reconfiguring existing space.
+  last_discussed: 2026-03-11
+
+- name: Documentary (Henry's Project)
+  status: active
+  owner: Henry / Alanna
+  priority: low
+  committee: none
+  next_milestone: Henry to make edits and send to Mitch/Sherry
+  blockers: []
+  context: |
+    Passion project documentary about Camp Downer. Initial cut reviewed, feedback
+    provided on narrative flow. Removing marriage ending, adding Mitch's quote about
+    camp lasting for generations. Will provide raw footage to camp.
+  last_discussed: 2026-03-09
+
+- name: Emergency Procedures Update
+  status: active
+  owner: Alanna
+  priority: medium
+  committee: operations
+  next_milestone: Present at Operations Committee meeting
+  blockers: []
+  context: |
+    Extensive updates to evacuation, reunification, power outage, and flood procedures
+    in response to ACA feedback and regional events (Texas flooding). Coordinating
+    with Sharon Fire Marshal on using firehouse for emergency reunification.
+  last_discussed: 2026-03-11
+
+- name: Septic Assessment
+  status: active
+  owner: Ryan / Amanda
+  priority: high
+  committee: buildings_grounds
+  next_milestone: Hire licensed environmental firm
+  blockers:
+    - Pathways Consulting unresponsive
+    - Sean Houston contacted, awaiting estimate
+  context: |
+    Critical for bathroom renovation project. Current septic poorly documented.
+    Main leach field behind dining hall may be failing and discharging to pond.
+    Need professional assessment before any renovation work.
+  last_discussed: 2026-02-23

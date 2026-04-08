@@ -1,0 +1,366 @@
+# =============================================================================
+# Camp Downer People Context - For Harbor AI Assistant
+# Board Chair: Phil Batalion
+# Last Updated: 2026-04-06
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# BOARD OFFICERS (Executive Committee)
+# -----------------------------------------------------------------------------
+
+- name: Phil Batalion
+  role: Board Chair
+  type: board_member
+  officer_role: chair
+  committees: [buildings_grounds, finance]
+  relationship: Self - Camp Downer alum
+  communication:
+    style: Data-driven, collaborative, tech-forward
+    frequency: Semi-weekly meetings with Alanna, EC meetings
+  context: >
+    Became chair in recent years. Strong technical background - builds tools
+    like board-manager.campdowner.com and uses AI for analysis. Wife Heather
+    is supportive of camp involvement. Attended camp as a child and values
+    institutional continuity. Works closely with Alanna on operations and
+    strategic decisions.
+
+- name: Emma Varnham
+  role: Board Vice Chair
+  type: board_member
+  officer_role: vice_chair
+  committees: [board_development, operations]
+  committee_chair: operations
+  relationship: Close partner, primary collaborator on leadership decisions
+  communication:
+    style: Thoughtful, organized, good at raising concerns diplomatically
+    frequency: EC meetings, committee meetings, frequent text
+  contact:
+    email: evarnham@campdowner.com
+    phone: "802-309-0790"
+  context: >
+    Previously attended semi-weekly director/chair/vice-chair meetings (for ~1 year)
+    but no longer due to schedule constraints. Chairs Operations Committee. Has deep
+    camp connections through family. Very engaged with staffing discussions and policy
+    questions. Sister is Johanna. Balances volunteer and personal life carefully -
+    appreciates when meetings are efficient.
+
+- name: Amanda Mitchell
+  role: Board Secretary
+  type: board_member
+  officer_role: secretary
+  committees: [buildings_grounds, operations]
+  relationship: Fellow officer, detail-oriented, deeply connected to camp families
+  communication:
+    style: Direct, thorough, transparent
+    frequency: EC meetings monthly, frequent async, committee meetings
+  contact:
+    email: amitchell@campdowner.com
+    phone: "802-233-4102"
+  context: >
+    Handles meeting minutes. Daughter Brooklyn is going through the staff pipeline.
+    Parents are Harold "Mitch" Mitchell (former Camp Director) and Sherry Mitchell.
+    Works in medical records/healthcare administration. Very engaged with staffing
+    discussions. Close friends with other camp parents - information spreads through
+    her network quickly. Term ends Nov 2026 (up for reelection).
+
+- name: Brian Rademacher
+  role: Board Treasurer
+  type: board_member
+  officer_role: treasurer
+  committees: [finance]
+  committee_chair: finance
+  relationship: Key financial partner, steady presence
+  communication:
+    style: Practical, sometimes needs follow-up on tasks
+    frequency: EC meetings, finance committee meetings
+  contact:
+    email: brademacher@campdowner.com
+    phone: "802-236-6155"
+  context: >
+    Chairs Finance Committee. Sometimes needs reminders on action items (e.g.,
+    M&T bank setup). Involved in water system opening crew. Works with Kelly Gray
+    on accounting questions.
+
+# -----------------------------------------------------------------------------
+# BOARD MEMBERS (Non-Officer)
+# -----------------------------------------------------------------------------
+
+- name: James Bean
+  role: Board Member
+  type: board_member
+  committees: [board_development]
+  committee_chair: board_development
+  relationship: Trusted collaborator, emerging leader
+  communication:
+    style: Engaged, takes initiative, good at follow-through
+    frequency: BDC meetings, ACA conference, periodic check-ins
+  contact:
+    email: jbean@campdowner.com
+    phone: "802-373-0216"
+  context: >
+    Chairs Board Development Committee. Attending ACA Conference with Phil in
+    2026. Elected BDC chair unanimously. Takes on organizing tasks like scheduling
+    meetings and save-the-dates. Planning board summit weekend for September 2026.
+
+- name: Kelly Crowley
+  role: Board Member
+  type: board_member
+  committees: [operations]
+  relationship: Immediate previous board chair, helpful mentor
+  communication:
+    style: Friendly, practical
+    frequency: Operations committee meetings, social events
+  contact:
+    email: kcrowley@campdowner.com
+    phone: "617-970-5232"
+  context: >
+    Immediate previous board chair before Phil. Phil uses his chair benefit to help
+    register her kids. Close with Amanda - they travel together. Active in camp parent
+    social circle. Note: Different from Kelly Gray (accountant). Term ends Nov 2026
+    (up for reelection).
+
+- name: Ian Tewksbury
+  role: Board Member
+  type: board_member
+  committees: [finance]
+  subcommittees: [bathroom_project]
+  relationship: Level-headed, brings outside perspective
+  communication:
+    style: Thoughtful, raises good questions, research-oriented
+    frequency: Finance committee, bathroom project subcommittee
+  contact:
+    email: itewksbury@campdowner.com
+    phone: "603-315-6790"
+  context: >
+    Son Connor is a long-time staff member (role challenges for 2026).
+    Ian is level-headed about Connor's situation - doesn't expect special
+    treatment. Asked about emergency procedures after Texas flooding.
+    Researched Green Mountain Power solar program (determined not viable).
+
+- name: Ryan Boucher
+  role: Board Member
+  type: board_member
+  committees: [buildings_grounds]
+  subcommittees: [bathroom_project]
+  relationship: Facilities-focused, hands-on volunteer
+  communication:
+    style: Practical, project-oriented
+    frequency: Buildings & Grounds meetings, work weekends
+  contact:
+    email: rboucher@campdowner.com
+    phone: "617-797-7244"
+  context: >
+    Active on bathroom project subcommittee. Part of Buildings & Grounds under
+    Amanda's coordination. Would help with volunteer weekends.
+
+- name: Zack Leffler
+  role: Board Member
+  type: board_member
+  committees: [buildings_grounds, operations]
+  subcommittees: [bathroom_project]
+  committee_chair: buildings_grounds
+  relationship: Newer chair, hands-on, may need some support
+  communication:
+    style: Engaged but learning to chair
+    frequency: B&G meetings, operations meetings
+  contact:
+    email: zleffler@campdowner.com
+  context: >
+    New chair of Buildings & Grounds committee. Was Phil's mentee during onboarding.
+    Active on bathroom project. First time chairing - may need support. Term ends
+    Nov 2026 (up for reelection).
+
+- name: Kate Brayton
+  role: Board Member
+  type: board_member
+  committees: [operations, board_development]
+  subcommittees: [merchandise]
+  relationship: Engaged, ensure she's looped into communications
+  communication:
+    style: Engaged when included
+    frequency: Committee meetings
+  contact:
+    email: Kbrayton@campdowner.com
+    phone: "802-999-2097"
+  context: >
+    Was accidentally left off Board Development committee communications initially.
+    Active on merchandise subcommittee and operations. Make sure she's looped into
+    relevant discussions. Term ends Nov 2026 (up for reelection).
+
+- name: Ethan Phelps
+  role: Board Prospect
+  type: prospect
+  committees_interested: [buildings_grounds]
+  relationship: Promising prospect with valuable operational expertise
+  communication:
+    style: Proactive, offers help, brings professional connections
+    frequency: Attending B&G meetings as prospect
+  context: >
+    PROSPECTIVE BOARD MEMBER (not yet elected). Operations lead at Killington
+    ski resort. Lives in Stockbridge (near camp). Offered to help with water
+    system opening, reviewing archery shed proposal with Killington contacts,
+    and bringing in-kind support. Raised good questions about Act 250 permits
+    and additional housing. Very engaged first impression.
+
+- name: Gabe
+  role: Board Prospect
+  type: prospect
+  relationship: In board mentorship pipeline
+  communication:
+    style: Engaged
+    frequency: BDC meetings as prospect
+  context: >
+    PROSPECTIVE BOARD MEMBER (not yet elected). In pipeline with Ethan and Megan.
+    Needs volunteer background check paperwork before being voted onto board.
+
+- name: Megan
+  role: Board Prospect
+  type: prospect
+  relationship: In board mentorship pipeline
+  communication:
+    style: Unknown
+    frequency: Periodic
+  context: >
+    PROSPECTIVE BOARD MEMBER (not yet elected). In pipeline with Ethan and Gabe.
+    Needs volunteer background check paperwork before being voted onto board.
+
+# -----------------------------------------------------------------------------
+# STAFF - Director
+# -----------------------------------------------------------------------------
+
+- name: Alanna
+  role: Director
+  type: staff
+  relationship: Primary operational partner, day-to-day camp leadership
+  communication:
+    style: Thorough, policy-focused, good at documentation
+    frequency: Semi-weekly 1:1 with Phil, committee meetings, frequent async
+  context: >
+    Married to Luke (2025). Lives at camp during summer in director's cabin.
+    Very focused on handbook updates, emergency procedures, and ACA compliance.
+    Sometimes spends significant time on policy documentation - Phil has gently
+    pushed back on over-documenting. Handles all staffing/hiring. Has made great
+    progress on 2026 hiring (33 staff by Feb). Works directly with Amy (registrar)
+    on registration issues and data analysis. Partner on scheduling app development.
+
+# -----------------------------------------------------------------------------
+# STAFF - Key Seasonal Staff
+# -----------------------------------------------------------------------------
+
+- name: Luke
+  role: Maintenance/Operations Staff
+  type: staff
+  relationship: Alanna's husband, valuable institutional knowledge
+  communication:
+    style: Hands-on, practical
+    frequency: Via Alanna, occasional direct on facilities
+  context: >
+    Married Alanna in 2025. Lives at director's cabin with her. Handles maintenance
+    and water system. Invaluable for institutional knowledge on facilities.
+    Not officially employed year-round but key resource.
+
+- name: Amy
+  role: Registrar
+  type: staff
+  relationship: Key partner on registration and camper data
+  communication:
+    style: Detail-oriented
+    frequency: Registration season heavy, periodic otherwise
+  context: >
+    Handles Camp Brain registration system. Works directly with Alanna on
+    registration issues, waitlist management, and data analysis. Created
+    churn analysis list of 300+ campers. Key resource for understanding
+    enrollment trends.
+
+# -----------------------------------------------------------------------------
+# KEY VOLUNTEERS
+# -----------------------------------------------------------------------------
+
+- name: Julia Sinton
+  role: Volunteer Coordinator (proposed)
+  type: volunteer
+  relationship: Prospective appointed board position
+  communication:
+    style: Interested, waiting on formalization
+    frequency: Periodic check-ins
+  context: >
+    Being considered for new Volunteer Coordinator position. Would be appointed
+    non-voting board member per job description. Requires bylaws amendment to
+    formalize. Still interested as of early 2026.
+
+- name: Steve Ertel
+  role: Volunteer - Water System
+  type: volunteer
+  relationship: Knowledgeable volunteer for water system
+  communication:
+    style: Technical, hands-on
+    frequency: Water opening weekends
+  context: >
+    Part of the crew that knows how to open the water system. Key person to
+    coordinate for spring volunteer weekends.
+
+- name: Nate Ertel
+  role: Volunteer - Water System
+  type: volunteer
+  relationship: Knowledgeable volunteer for water system
+  communication:
+    style: Technical, hands-on
+    frequency: Water opening weekends
+  context: >
+    Part of water system opening crew with Steve Ertel. Contact for spring
+    volunteer weekends.
+
+# -----------------------------------------------------------------------------
+# KEY COMMUNITY FIGURES
+# -----------------------------------------------------------------------------
+
+- name: Harold "Mitch" Mitchell
+  role: Former Camp Director
+  type: community
+  relationship: Amanda's father, Brooklyn's grandfather
+  communication:
+    style: Thoughtful
+    frequency: Family events, special occasions
+  context: >
+    Previous Camp Director. Goes by "Mitch." Married to Sherry Mitchell.
+    Father of Amanda Mitchell (current board secretary). Grandfather to
+    Brooklyn. His quote about camp lasting for generations is being used
+    in Henry's documentary. Note: Different from Mitch Ferrada (former board chair).
+
+- name: Tim Morton
+  role: State Contact / Forestry
+  type: external
+  relationship: DEC/State liaison
+  communication:
+    style: Professional
+    frequency: Annual forestry meeting, as needed
+  context: >
+    State contact for forestry/DEC matters. Has annual forestry meeting at
+    camp in September (Sept 18 weekend for 2026). Key contact for understanding
+    permitting pathways and contractor recommendations.
+
+# -----------------------------------------------------------------------------
+# SERVICE PROVIDERS
+# -----------------------------------------------------------------------------
+
+- name: Kelly Gray
+  role: Accountant
+  type: vendor
+  relationship: Financial/accounting support
+  communication:
+    style: Professional
+    frequency: As needed for accounting questions
+  context: >
+    NOTE: Different from Kelly Crowley (board member). Handles accounting
+    questions. Brian should coordinate with her on finance matters.
+
+- name: Sean Houston
+  role: Septic Assessment Provider
+  type: vendor
+  relationship: New contact for septic work
+  communication:
+    style: Professional
+    frequency: Project-based
+  context: >
+    Contacted for septic assessment after Pathways became unresponsive.
+    Elena forwarding cost estimate to executive committee.

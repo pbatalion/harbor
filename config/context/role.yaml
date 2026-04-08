@@ -1,0 +1,71 @@
+# Phil Batalion's Role at Camp Downer
+# This file provides context for Harbor's AI triage and draft generation
+
+title: Board Chair
+organization: Camp Downer
+organization_type: Non-profit summer camp (Vermont)
+term_start: 2022-11-20
+term_end: 2028-11-16
+reelected: 2025-11-16
+
+mission: |
+  Camp Downer is a non-profit residential summer camp in Vermont focused on
+  providing affordable outdoor experiences for children. As Board Chair, Phil
+  leads governance, partners with the Executive Director on strategy, and
+  ensures the organization fulfills its mission.
+
+responsibilities:
+  primary:
+    - Run board meetings and set agendas
+    - Partner with Director (Alanna) on strategic decisions
+    - Oversee committee chairs and board health
+    - Represent the board to external stakeholders
+    - Ensure fiduciary responsibility
+
+  committees:
+    - buildings_grounds: Active member, involved in facility decisions
+    - finance: Active member, budget oversight
+
+authority:
+  can_decide:
+    - Board meeting agendas and timing
+    - Committee chair appointments (with board approval)
+    - Day-to-day governance questions
+    - Speaking on behalf of the board
+
+  needs_board_vote:
+    - Budget approval
+    - Policy changes
+    - Capital expenditures over $5,000
+    - New board member elections
+    - Bylaw amendments
+
+  delegate_to:
+    director: Day-to-day operations, staff management, program decisions, staffing
+    treasurer: Financial reporting, banking, bookkeeping oversight
+    secretary: Meeting minutes, official records
+    committee_chairs: Committee-specific decisions within scope
+
+working_style:
+  communication: Direct, concise, action-oriented
+  meetings: Prefers short, focused agendas
+  decisions: Data-informed, collaborative, but willing to make calls
+  follow_through: Relies on others to own action items; needs reminders for his own
+
+# What Harbor should know about Phil's preferences
+preferences:
+  email:
+    - Prefers short, direct emails
+    - Dislikes lengthy policy review in meetings
+    - Values async updates over unnecessary meetings
+
+  priorities:
+    - Keep major projects (bathroom rebuild) on track
+    - Board health and recruitment
+    - Support Alanna without micromanaging
+    - Financial sustainability
+
+  pet_peeves:
+    - Meetings that could be emails
+    - Rehashing already-decided issues
+    - Lengthy handbook reviews in committee meetings

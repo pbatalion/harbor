@@ -10,7 +10,7 @@ from rq import Retry
 
 from src.delivery.email_digest import send_email_digest
 from src.delivery.sms import send_sms_alert
-from src.integrations.supabase import sync_run_snapshot
+from src.integrations.supabase import init_run_in_supabase, sync_run_snapshot
 from src.intelligence.enhanced_triage import generate_drafts, run_enhanced_triage
 from src.intelligence.normalizer import normalize_events
 from src.intelligence.schema import deterministic_fallback_digest, validate_json_schema
@@ -113,7 +113,7 @@ def enqueue_assistant_run() -> str:
 
     run_id = str(uuid.uuid4())
     create_run(settings.database_path, run_id)
-
+    init_run_in_supabase(settings, run_id)
     queue = get_queue(settings)
     retry = Retry(max=2, interval=[15, 45])
 

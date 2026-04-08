@@ -6,6 +6,7 @@ import { ItemBoard } from "./ItemBoard";
 import { DraftsPanel } from "./DraftsPanel";
 import { CalendarPanel } from "./CalendarPanel";
 import { ContentTabs } from "./ContentTabs";
+import { TodayPanel } from "./TodayPanel";
 
 type PageProps = {
   params: Promise<{
@@ -122,6 +123,8 @@ export default async function WorkspacePage(props: PageProps) {
           )}
         </div>
 
+        {/* Today Panel */}
+        <TodayPanel run={snapshot.run} workspaceSlug={params.workspaceSlug} />
         {/* Content Tabs */}
         <ContentTabs
           workspaceSlug={params.workspaceSlug}
