@@ -6,6 +6,9 @@ type TodayPanelProps = {
 };
 
 export function TodayPanel({ run, workspaceSlug }: TodayPanelProps) {
+  // Only show on Downer workspace since context is Camp Downer focused
+  if (workspaceSlug !== "downer") return null;
+  
   if (!run) return null;
   
   const hasDayPlan = run.dayPlan && run.dayPlan.trim().length > 0;
